@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>2048</title>
+    <link rel="stylesheet" href="css/StyleSheet1.css" />
+    <script src="js/jquery-3.2.1.min.js"></script>
+	<script src="js/jquery.touchSwipe.min.js"></script>
+    <script type="text/javascript" src="js/JavaScript1.js"></script>
+</head>
+<body style="background-color:black">
+    <div style="color:white;">
+        <h1>2048</h1>
+        <p>Join the numbers and get to the 2048 tile!</p>
+    </div><br/>
+    
+    <button type="button" class="reset-btn" onclick="resetTiles()">New Game</button><br/><br/>
+    <span style="color:white;">Moves : <span id="moves"></span>
+        &nbsp;
+        Score : <span id="score"></span>
+        &nbsp;
+        Best : <span id="best"></span>
+    </span>
+
+    <div class="game-container">
+         <div class="tile"><h1 id="00" style="font-family:fantasy"></h1></div>
+         <div class="tile"><h1 id="01" style="font-family:fantasy"></h1></div>
+         <div class="tile"><h1 id="02" style="font-family:fantasy"></h1></div>
+         <div class="tile"><h1 id="03" style="font-family:fantasy"></h1></div>
+
+         <div class="tile"><h1 id="10" style="font-family:fantasy"></h1></div>
+         <div class="tile"><h1 id="11" style="font-family:fantasy"></h1></div>
+         <div class="tile"><h1 id="12" style="font-family:fantasy"></h1></div>
+         <div class="tile"><h1 id="13" style="font-family:fantasy"></h1></div>
+        
+         <div class="tile"><h1 id="20" style="font-family:fantasy"></h1></div>
+         <div class="tile"><h1 id="21" style="font-family:fantasy"></h1></div>
+         <div class="tile"><h1 id="22" style="font-family:fantasy"></h1></div>
+         <div class="tile"><h1 id="23" style="font-family:fantasy"></h1></div>
+        
+         <div class="tile"><h1 id="30" style="font-family:fantasy"></h1></div>
+         <div class="tile"><h1 id="31" style="font-family:fantasy"></h1></div>
+         <div class="tile"><h1 id="32" style="font-family:fantasy"></h1></div>
+         <div class="tile"><h1 id="33" style="font-family:fantasy"></h1></div>
+    </div>
+    <div id="toast-container">
+        <span id="toast-message">
+            Some error occured.
+        </span>
+    </div>
+</body>
+</html>
