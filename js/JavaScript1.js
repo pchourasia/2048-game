@@ -52,37 +52,43 @@ function display() {
             if (arr[i][j]) {
                 p = document.getElementById(i.toString() + j.toString());
                 if(arr[i][j]==2){
-                    p.style.color = "#D4AC0D";
+                    p.parentElement.style.backgroundColor = "#ccebff";
                 }
                 else if (arr[i][j] == 4) {
-                    p.style.color = "#F39C12";
+                    p.parentElement.style.backgroundColor = "#b3e0ff";
                 }
                 else if (arr[i][j] == 8) {
-                    p.style.color = "#CA6F1E";
+                    p.parentElement.style.backgroundColor = "#99d6ff";
                 }
                 else if (arr[i][j] == 16) {
-                    p.style.color = "#E67E22";
+                    p.parentElement.style.backgroundColor = "#80ccff";
+                }
+                else if(arr[i][j] == 32) {
+                    p.parentElement.style.backgroundColor = "#66c2ff";
                 }
                 else if (arr[i][j] == 64) {
-                    p.style.color = "#7D6608";
+                    p.parentElement.style.backgroundColor = "#4db8ff";
                 }
                 else if (arr[i][j] == 128) {
-                    p.style.color = "#C0392B";
+                    p.parentElement.style.backgroundColor = "#33adff";
                 }
                 else if (arr[i][j] == 256) {
-                    p.style.color = "#873600";
+                    p.parentElement.style.backgroundColor = "#1aa3ff";
                 }
                 else if (arr[i][j] == 512) {
-                    p.style.color = "#5D6D7E";
+                    p.parentElement.style.backgroundColor = "#0099ff";
                 }
                 else if (arr[i][j] == 1024) {
-                    p.style.color = "#283747";
+                    p.parentElement.style.backgroundColor = "#008ae6";
                 }
                 else if (arr[i][j] == 2048) {
-                    p.style.color = "#9A7D0A";
+                    p.parentElement.style.backgroundColor = "#007acc";
+                }
+                else if (arr[i][j] == 4096) {
+                    p.parentElement.style.backgroundColor = "#006bb3";
                 }
                 else {
-                    p.style.color = "#B03A2E";
+                    p.parentElement.style.backgroundColor = "#005c99";
                 }
                 p.innerHTML = arr[i][j];
 
@@ -90,6 +96,7 @@ function display() {
             else {
                 p = document.getElementById(i.toString() + j.toString());
                 p.innerHTML = "";
+                p.parentElement.style.backgroundColor = "#e6f5ff";
                 emptyTile = false;
             }
         }
@@ -112,9 +119,24 @@ function updateScoreBoard(){
 }
 
 function checkGameOver() {
+    var i,j, isGameOver=true;
     if (moves && !flagD && !flagL && !flagR && !flagT) {
-        document.getElementsByClassName('game-container')[0].style.opacity = 0.7;
-        showToast("Game Over!!\nYou don't have any moves.");
+        for(i=0;i<4;i++){
+            for(j=0; j<3; j++){
+                if(arr[i][j]==arr[i][j+1]){
+                    isGameOver=false;
+                    break;
+                }
+                if(arr[j][i]==arr[j+1][i]){
+                    isGameOver=false;
+                    break;
+                }
+            }
+        }
+        if(isGameOver){
+            document.getElementsByClassName('game-container')[0].style.opacity = 0.7;
+            showToast("Game Over!!\nYou don't have any moves.");
+        }
     } 
 }
 
@@ -305,13 +327,22 @@ function showToast(message) {
     }, 3000);
 }
 
+function showInformation() {
+    var info = document.getElementById('info-container');
+    document.getElementById("info-message").textContent = 'Swipe right, left, up and down to add the numbers shown in tile, and make the tile with number 2048.';
+    info.className = "show";
+    document.getElementsByClassName('game-container')[0].style.opacity = 0.5;
+}
+
+function hideInformation(){
+    document.getElementById('info-container').classList.replace("show", "hide");
+    document.getElementsByClassName('game-container')[0].style.opacity = 1;
+}
+
 
 window.onload = function () {
     document.getElementById('best').innerHTML = best;
-    initializeArray();
-    generateNum();
-    generateNum();
-    display();
+    resetTiles();
     window.addEventListener("keyup", myKeyPress);
 	$('.game-container').swipe({
 	swipeLeft:function(event, direction, distance, duration, fingerCount) {
