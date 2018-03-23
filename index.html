@@ -9,40 +9,49 @@
 </head>
 <body style="background-color:black">
     <div style="color:white;">
-        <h1>2048</h1>
+        <h1>2048
+        <span class='refreshIcon icon' onclick="resetTiles()"></span>
+        <span class='infoIcon icon' onclick = "showInformation()"></span></h1>
         <p>Join the numbers and get to the 2048 tile!</p>
-    </div><br/>
-    
-    <button type="button" class="reset-btn" onclick="resetTiles()">New Game</button><br/><br/>
-    <span style="color:white;">Moves : <span id="moves"></span>
-        &nbsp;
-        Score : <span id="score"></span>
-        &nbsp;
-        Best : <span id="best"></span>
-    </span>
-
+    </div>
+    <br/>
+    <div id='scoreBoard'>
+        <div class='scoreBox'>Moves <br/><h3><span id="moves"></span></h3></div>
+        <div class='scoreBox'>Score <br/><h3><span id="score"></span></h3></div>
+        <div class='scoreBox'>Best <br/><h3><span id="best"></span></h3></div>
+    </div>
+    <div id='info-container'>
+        <h3>Information
+        <div class='closeIcon' style="float:right;" onclick="hideInformation()"></div></h3>
+        <div id="info-message">
+            Some error occured.
+        </div>
+    </div>
+    <br/>
+    <br/>
     <div class="game-container">
-         <div class="tile"><h1 id="00" style="font-family:fantasy"></h1></div>
-         <div class="tile"><h1 id="01" style="font-family:fantasy"></h1></div>
-         <div class="tile"><h1 id="02" style="font-family:fantasy"></h1></div>
-         <div class="tile"><h1 id="03" style="font-family:fantasy"></h1></div>
+         <div class="tile"><h1 id="00"></h1></div>
+         <div class="tile"><h1 id="01"></h1></div>
+         <div class="tile"><h1 id="02"></h1></div>
+         <div class="tile"><h1 id="03"></h1></div>
 
-         <div class="tile"><h1 id="10" style="font-family:fantasy"></h1></div>
-         <div class="tile"><h1 id="11" style="font-family:fantasy"></h1></div>
-         <div class="tile"><h1 id="12" style="font-family:fantasy"></h1></div>
-         <div class="tile"><h1 id="13" style="font-family:fantasy"></h1></div>
+         <div class="tile"><h1 id="10"></h1></div>
+         <div class="tile"><h1 id="11"></h1></div>
+         <div class="tile"><h1 id="12"></h1></div>
+         <div class="tile"><h1 id="13"></h1></div>
         
-         <div class="tile"><h1 id="20" style="font-family:fantasy"></h1></div>
-         <div class="tile"><h1 id="21" style="font-family:fantasy"></h1></div>
-         <div class="tile"><h1 id="22" style="font-family:fantasy"></h1></div>
-         <div class="tile"><h1 id="23" style="font-family:fantasy"></h1></div>
+         <div class="tile"><h1 id="20"></h1></div>
+         <div class="tile"><h1 id="21"></h1></div>
+         <div class="tile"><h1 id="22"></h1></div>
+         <div class="tile"><h1 id="23"></h1></div>
         
-         <div class="tile"><h1 id="30" style="font-family:fantasy"></h1></div>
-         <div class="tile"><h1 id="31" style="font-family:fantasy"></h1></div>
-         <div class="tile"><h1 id="32" style="font-family:fantasy"></h1></div>
-         <div class="tile"><h1 id="33" style="font-family:fantasy"></h1></div>
+         <div class="tile"><h1 id="30"></h1></div>
+         <div class="tile"><h1 id="31"></h1></div>
+         <div class="tile"><h1 id="32"></h1></div>
+         <div class="tile"><h1 id="33"></h1></div>
     </div>
     <div id="toast-container">
+        <span class = 'alertIcon'></span>
         <span id="toast-message">
             Some error occured.
         </span>
