@@ -7,28 +7,31 @@
 	<script src="js/jquery.touchSwipe.min.js"></script>
     <script type="text/javascript" src="js/JavaScript1.js"></script>
 </head>
-<body style="background-color:black">
-    <div style="color:white;">
-        <h1>2048
-        <span class='refreshIcon icon' onclick="resetTiles()"></span>
-        <span class='infoIcon icon' onclick = "showInformation()"></span></h1>
-        <p>Join the numbers and get to the 2048 tile!</p>
-    </div>
-    <br/>
-    <div id='scoreBoard'>
-        <div class='scoreBox'>Moves <br/><h3><span id="moves"></span></h3></div>
-        <div class='scoreBox'>Score <br/><h3><span id="score"></span></h3></div>
-        <div class='scoreBox'>Best <br/><h3><span id="best"></span></h3></div>
-    </div>
-    <div id='info-container'>
-        <h3>Information
-        <div class='closeIcon' style="float:right;" onclick="hideInformation()"></div></h3>
-        <div id="info-message">
-            Some error occured.
+<body>
+    <div id='game-info'>
+        <div id='game-header'>
+            <h1 style="display:inline-block;">2048</h1>
+            <h1 class='icons'>
+                <span class='refreshIcon' onclick="resetTiles()"></span>
+                <span class='infoIcon'></span>
+            </h1>
+            <p>Join the numbers and get to the 2048 tile!</p>
+        </div>
+        <div id='scoreBoard'>
+            <div class='scoreBox'>Moves <br/><span id="moves"></span></div>
+            <div class='scoreBox'>Score <br/><span id="score"></span></div>
+            <div class='addScore'></div>
+            <div class='scoreBox'>Best <br/><span id="best"></span></div>
+        </div>
+        <div id='info-container'>
+            <div><b>Information</b>
+            <span class='closeIcon' style="float:right;"></span></div>
+            <div id="info-message">
+                Some error occured.
+            </div>
         </div>
     </div>
-    <br/>
-    <br/>
+   
     <div class="game-container">
          <div class="tile"><h1 id="00"></h1></div>
          <div class="tile"><h1 id="01"></h1></div>

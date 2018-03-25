@@ -1,42 +1,38 @@
-﻿html, body{
-    margin:0;
-	width: 100%;
+﻿html,body{
+    /* height: 100%;
+    width: 100%;
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0; */
+    background-color: #e6ffff;
+    color: black;
 }
 
 .game-container {
     position:absolute;
-    width: 100%;
-    height:50%;
     left: 50%;
 	transform: translateX(-50%);
     bottom: 5%;
-	/* border: 5px solid #039be5;
-    border-radius: 1em; */
-    background-color: #5c5a5a;
+    border-radius: 10px;
+    background-color: #008080;
     font-family:fantasy;
+    padding: 2px;
 }
 
 .tile {
     position:relative;
-    /* border: 1px solid blue; */
     text-align:center;
-    width:24%;
-    /* padding-top:10px; */
-    height: 24.5%;
     float:left;
-    background-color: lightgray;
+    background-color: #e6f5ff;
     border-radius: 10px;
-     /* box-shadow: 10px 10px 10px #039be5;  */
 	align-items: center;
     display: inline-grid;
     color: rgb(59, 59, 59);
-    margin: 1px;
+    margin: 2px;
 }
-    /* .tile:hover {
-        box-shadow: 10px 10px 50px #039be5 inset;
-    } */
 
-.icon{
+.icons{
     float: right;
     margin-right: 10px;
 }
@@ -60,10 +56,10 @@
     visibility: hidden;
     min-width: 250px;
     max-height: 500px;
-    background-color: #696969;
-    color: white;
+    background-color: #e6f5ff;
+    color: rgb(4, 120, 173);
+    border: 3px solid #008080;
     text-align: justify;
-    border: 3px solid lightgray;
     border-radius: 2px;
     padding: 16px;
     position: absolute;
@@ -77,8 +73,8 @@
 
     #info-container.show {
         visibility: visible;
-        -webkit-animation: fadein 0.5s;
-        animation: fadein 0.5s;
+        -webkit-animation: fadeinInfo 0.5s;
+        animation: fadeinInfo 0.5s;
     }
 
     #info-container.hide {
@@ -86,13 +82,42 @@
       
     }
 
+@-webkit-keyframes fadeinInfo {
+    from {
+        top: 0;
+        opacity: 0;
+    }
+
+    to {
+        top: 50%;
+        opacity: 1;
+    }
+}
+
+@keyframes fadeinInfo {
+    from {
+        top: 0;
+        opacity: 0;
+    }
+
+    to {
+        top: 50%;
+        opacity: 1;
+    }
+}
+
+#info-message{
+    margin-top: 15px;
+}
+
 #toast-container {
     visibility: hidden;
     min-width: 250px;
-    background-color: #f1f1f1;
+    background-color: #e6f5ff;
     color: rgb(4, 120, 173);
+    border: 3px solid #008080;
+    border-radius: 3px;
     text-align: center;
-    border-radius: 2px;
     padding: 16px;
     position: absolute;
     z-index: 9999;
@@ -109,19 +134,144 @@
         animation: fadein 0.5s, fadeout 0.5s 2.5s;
     }
 
+
+@-webkit-keyframes fadein {
+    from {
+        top: 0;
+        opacity: 0;
+    }
+
+    to {
+        top: 40px;
+        opacity: 1;
+    }
+}
+
+@keyframes fadein {
+    from {
+        top: 0;
+        opacity: 0;
+    }
+
+    to {
+        top: 40px;
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadeout {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes fadeout {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
 #scoreBoard{
     display: flex;
     justify-content: center;
 }
 
 .scoreBox{
-    width: 70px;
-    height: 70px;
-    /* background-color: lightskyblue; */
+    min-width: 50px;
+    height: 40px;
     background: linear-gradient(lightskyblue, #0066ff);
     color: black;
     margin-right: 10px;
     border-radius: 3px;
-    padding: 5px;
+    padding: 10px;
     text-align: center;
+}
+
+.scoreBox > span{
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.newAnimation{
+    animation: scaleTile 0.2s;
+}
+
+@keyframes scaleTile{
+    0%{
+        transform: scale(0,0);
+    }
+    100%{
+        transform: scale(1,1);
+    }
+}
+
+.joinAnimation{
+    animation: zoomTile 0.2s;
+}
+
+@keyframes zoomTile{
+    0%{
+        transform: scale(1,1);
+    }
+    100%{
+        transform: scale(1.2,1.2);
+    }
+}
+
+.addScore{
+    position: absolute;
+    display: inline-block;
+    width:20px;
+    height: 20px;
+    color: #008080;
+}
+
+.shiftLeft{
+    animation: shiftLeftAnimation 0.2s;
+}
+
+@keyframes shiftLeftAnimation{
+    0%{
+        opacity: 1;
+        
+    }
+}
+
+
+@media only screen and (orientation: landscape) {
+    .game-container{
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+    }
+
+    #scoreBoard{
+        position: absolute;
+        right: 5%;
+        top: 50%;
+        transform: translateY(-50%);
+        display: table;
+    }
+
+    .scoreBox{
+        margin-top: 10px;
+    }
+
+    .icons{
+        position: absolute;
+        bottom: 15px;
+        left: 10px;
+    }
+
+    #game-header{
+        width: 20%;
+    }
 }
