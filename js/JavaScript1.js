@@ -1,9 +1,10 @@
 ﻿var arr = new Array(4);
 var moves = 0, score = 0, flagL = false, flagR = false, flagT = false, flagD = false, emptyTile = true;
 var best = localStorage.getItem("2048_best") ? localStorage.getItem("2048_best") : 0;
-var newAnimation=[], joinAnimation=[];
+var newAnimation=[], joinAnimation=[], addScoreAnimationPos=[];
 var GamePlatform = {
     isGameOver: false,
+    detachSwipe: false,
     showToast: function(message) {
         var toast = document.getElementById('toast-container');
         document.getElementById("toast-message").textContent = message;
@@ -13,18 +14,44 @@ var GamePlatform = {
         }, 3000);
     },
 
-    showInformation: function() {
+    showModal: function(type, msg, showButtons){
         var info = document.getElementById('info-container');
-        document.getElementById("info-message").textContent = 'Swipe right, left, up and down to add the numbers shown in tile, and make the tile with number 2048.';
+        document.getElementById("info-message").textContent = msg;
+        switch(type){
+            case 'info':
+                $('#info-ok').show();
+                $('#info-cancel').hide();
+                $('#info-yes').hide();
+                break;
+            case 'restart':
+                $('#info-yes').show();
+                $('#info-cancel').show();
+                $('#info-ok').hide();
+                break;
+        }
         info.className = "show";
         document.getElementsByClassName('game-container')[0].style.opacity = 0.5;
+        GamePlatform.detachSwipe = true;
+    },
+
+    showInformation: function() {
+        var msg = 'Swipe right, left, up and down to add the numbers shown in tile, and make the tile with number 2048.';
+        var showButtons = false;
+        GamePlatform.showModal('info', msg, showButtons);
     },
 
     hideInformation: function(){
         document.getElementById('info-container').classList.replace("show", "hide");
+        GamePlatform.detachSwipe = false;
         if(!GamePlatform.isGameOver){
             document.getElementsByClassName('game-container')[0].style.opacity = 1;
         }
+    },
+
+    restartGame: function(){
+        var msg = 'Do you want to restart the game?';
+        var showButtons = true;
+        GamePlatform.showModal('restart', msg, showButtons);
     }
 }
 
@@ -53,22 +80,46 @@ var GameContainer = {
     addSwipeEvent: function(){
         $('.game-container').swipe({
             swipeLeft:function(event, direction, distance, duration, fingerCount) {
-                                    shiftLeft();
-                                    event.preventDefault();
+                                    if(!GamePlatform.detachSwipe){
+                                        shiftLeft();
+                                        event.preventDefault();
+                                    }
                                 },
             swipeRight:function(event, direction, distance, duration, fingerCount) {
-                                    shiftRight();
-                                    event.preventDefault();
+                                    if(!GamePlatform.detachSwipe){
+                                        shiftRight();
+                                        event.preventDefault();
+                                    }
                                 },
             swipeUp:function(event, direction, distance, duration, fingerCount) {
-                                    shiftTop();
-                                    event.preventDefault();
+                                    if(!GamePlatform.detachSwipe){
+                                        shiftTop();
+                                        event.preventDefault();
+                                    }
                                 },
             swipeDown:function(event, direction, distance, duration, fingerCount) {
-                                    shiftDown();
-                                    event.preventDefault();
+                                    if(!GamePlatform.detachSwipe){
+                                        shiftDown();
+                                        event.preventDefault();
+                                    }
                                 },
         });
+    },
+
+    showAddScore: function(diff){
+        var el = document.getElementById('addScore');
+        el.innerHTML = '+' + diff;
+        var __css = `@keyframes addScoreAnimation{
+                        0%{ opacity: 1; top: `+addScoreAnimationPos[0]+`px;z-index:1;} 
+                        90%{ opacity: 0.2;top: `+addScoreAnimationPos[1]+`px;z-index:1; }
+                        100%{ opacity: 0; z-index:0; }
+                    }`;
+        $('#addScore').append('<style type="text/css">' + __css + '</style>');
+        if(el.classList.contains('addScoreMove')){
+            el.classList.remove('addScoreMove');
+        }
+        void el.offsetWidth;
+        el.classList.add('addScoreMove'); 
     }
 }
     
@@ -116,6 +167,17 @@ function initializeArray() {
     }
 }
 
+function showAnimation(el, animationToBeAdded){
+    if(el.classList.contains('newAnimation')){
+        el.classList.remove('newAnimation');
+    }
+    if(el.classList.contains('joinAnimation')){
+        el.classList.remove('joinAnimation');
+    }
+    void el.offsetWidth;
+    el.classList.add(animationToBeAdded);
+}
+
 function display() {
     var i = 0, j = 0, index;
     var tileData, tileDataParent;
@@ -127,26 +189,12 @@ function display() {
             if (arr[i][j]) {
                 index = newAnimation.indexOf(i+''+j);
                 if(index != -1){
-                    if(tileDataParent.classList.contains('newAnimation')){
-                        tileDataParent.classList.remove('newAnimation');
-                    }
-                    if(tileDataParent.classList.contains('joinAnimation')){
-                        tileDataParent.classList.remove('joinAnimation');
-                    }
-                    void tileDataParent.offsetWidth;
-                    tileDataParent.classList.add('newAnimation');
+                    showAnimation(tileDataParent, 'newAnimation');
                     newAnimation.splice(index, 1);
                 }
                 index = joinAnimation.indexOf(i+''+j);
                 if(index != -1){
-                    if(tileDataParent.classList.contains('joinAnimation')){
-                        tileDataParent.classList.remove('joinAnimation');
-                    }
-                    if(tileDataParent.classList.contains('newAnimation')){
-                        tileDataParent.classList.remove('newAnimation');
-                    }
-                    void tileDataParent.offsetWidth;
-                    tileDataParent.classList.add('joinAnimation');
+                    showAnimation(tileDataParent, 'joinAnimation');
                     joinAnimation.splice(index,1);
                 }
                 switch(arr[i][j]){
@@ -237,31 +285,31 @@ function checkGameOver() {
 
 function myKeyPress(e) {
     var keynum;
-
-    if (window.event) { // IE                    
-        keynum = e.keyCode;
-    } else if (window.which) { // Netscape/Firefox/Opera/Google                
-        keynum = e.which;
+    if(!GamePlatform.detachSwipe){
+        if (window.event) { // IE                    
+            keynum = e.keyCode;
+        } else if (window.which) { // Netscape/Firefox/Opera/Google                
+            keynum = e.which;
+        }
+        var key=String.fromCharCode(keynum);
+        if (keynum == 37) {
+            shiftLeft();
+        }
+        if (keynum == 38) {
+            shiftTop();
+        }
+        if (keynum == 39) {
+            shiftRight();
+        }
+        if (keynum == 40) {
+            shiftDown();
+        }
     }
-    var key=String.fromCharCode(keynum);
-    if (keynum == 37) {
-        shiftLeft();
-    }
-    if (keynum == 38) {
-        shiftTop();
-    }
-    if (keynum == 39) {
-        shiftRight();
-    }
-    if (keynum == 40) {
-        shiftDown();
-    }
-    
 }
 
 
 function shiftLeft() {
-    var i = 0, j = 1, k=0, x = 0, y = 0, index, isShiftNeeded;
+    var i = 0, j = 1, k=0, x = 0, y = 0, index, isShiftNeeded, oldScore = score;
     flagL = false;
     flagD = false;
     flagR = false;
@@ -301,7 +349,11 @@ function shiftLeft() {
             }
         }
     }
-     
+    var diff = score - oldScore
+    if(diff > 0){
+        GameContainer.showAddScore(diff);
+    }
+        
     if (flagL) {
         generateNum();
         moves++;
@@ -310,7 +362,7 @@ function shiftLeft() {
 }
 
 function shiftRight() {
-    var i = 0, j = 2, k=0, x = 0, y = 0,index, isShiftNeeded;
+    var i = 0, j = 2, k=0, x = 0, y = 0,index, isShiftNeeded, oldScore = score;
     flagL = false;
     flagD = false;
     flagR = false;
@@ -350,6 +402,11 @@ function shiftRight() {
             }
         }
     }
+    var diff = score - oldScore
+    if(diff > 0){
+        GameContainer.showAddScore(diff);
+    }
+        
     if (flagR) {
         generateNum();
         moves++;
@@ -358,7 +415,7 @@ function shiftRight() {
 }
 
 function shiftTop() {
-    var i = 0, j = 1,k=0, x = 0, y = 0,index, isShiftNeeded;
+    var i = 0, j = 1,k=0, x = 0, y = 0,index, isShiftNeeded, oldScore = score;
     flagL = false;
     flagD = false;
     flagR = false;
@@ -398,7 +455,11 @@ function shiftTop() {
             }
         }
     }
-
+    var diff = score - oldScore
+    if(diff > 0){
+        GameContainer.showAddScore(diff);
+    }
+        
     if (flagT) {
         generateNum();
         moves++;
@@ -407,7 +468,7 @@ function shiftTop() {
 }
 
 function shiftDown() {
-    var i = 0, j = 2, k=0, x = 0, y = 0,index, isShiftNeeded;
+    var i = 0, j = 2, k=0, x = 0, y = 0,index, isShiftNeeded, oldScore = score;
     flagL = false;
     flagD = false;
     flagR = false;
@@ -447,6 +508,10 @@ function shiftDown() {
             }
         }
     }
+    var diff = score - oldScore
+    if(diff > 0){
+        GameContainer.showAddScore(diff);
+    }
         
     if (flagD) {
         generateNum();
@@ -455,13 +520,48 @@ function shiftDown() {
     display();
 }
 
+function getPosition(ele) {
+    var position = ele.getBoundingClientRect();
+    return {
+        x: position.x,
+        y: position.y,
+        top: position.top,
+        bottom: position.bottom,
+        left: position.left,
+        right: position.right,
+        width: ele.offsetWidth,
+        height: ele.offsetHeight
+    }
+}
+
+function setAddScore(){
+    var el = document.getElementById('addScore');
+    var gameContainer = document.getElementsByClassName('game-container')[0];
+    var gameContainerPosition = getPosition(gameContainer);
+    el.style.top = gameContainerPosition.y + 'px';
+    el.style.left = gameContainerPosition.x + gameContainerPosition.width/2 - 20 + 'px' ;
+
+    var scoreEl = document.getElementById('score');
+    var scoreElPosition = getPosition(scoreEl);
+    addScoreAnimationPos[0] = gameContainerPosition.y-20;
+    addScoreAnimationPos[1] = scoreElPosition.y+ 25; //scoreElPosition.height/2;
+}
+
 
 window.onload = function () {
     GameContainer.setTile();
+    setAddScore();
     document.getElementById('best').innerHTML = best;
     resetTiles();
     window.addEventListener("keyup", myKeyPress);
     GameContainer.addSwipeEvent();
     $('.infoIcon').on('click', GamePlatform.showInformation);
     $('.closeIcon').on('click', GamePlatform.hideInformation);
+    $('.refreshIcon').on('click', GamePlatform.restartGame);
+    $('#info-yes').on('click', function(){
+        resetTiles();
+        GamePlatform.hideInformation();
+    });
+    $('#info-cancel').on('click', GamePlatform.hideInformation);
+    $('#info-ok').on('click', GamePlatform.hideInformation);
 }

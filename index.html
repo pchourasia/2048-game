@@ -12,22 +12,28 @@
         <div id='game-header'>
             <h1 style="display:inline-block;">2048</h1>
             <h1 class='icons'>
-                <span class='refreshIcon' onclick="resetTiles()"></span>
+                <span class='refreshIcon'></span>
                 <span class='infoIcon'></span>
-            </h1>
-            <p>Join the numbers and get to the 2048 tile!</p>
+            </h1><br/>
+            <span>Join the numbers and get to the 2048 tile!</span>
         </div>
         <div id='scoreBoard'>
             <div class='scoreBox'>Moves <br/><span id="moves"></span></div>
             <div class='scoreBox'>Score <br/><span id="score"></span></div>
-            <div class='addScore'></div>
+            <div id='addScore'></div>
             <div class='scoreBox'>Best <br/><span id="best"></span></div>
         </div>
         <div id='info-container'>
-            <div><b>Information</b>
-            <span class='closeIcon' style="float:right;"></span></div>
+            <!-- <div id='info-heading'>Information
+                <span class='closeIcon' style="float:right;">X</span>
+            </div> -->
             <div id="info-message">
                 Some error occured.
+            </div>
+            <div id='info-buttons'>
+                <button id='info-yes'>YES</button>
+                <button id='info-ok'>OK</button>
+                <button id='info-cancel'>CANCEL</button>
             </div>
         </div>
     </div>
